@@ -1,0 +1,123 @@
+# ================= CLIPS AUTOMÁTICOS: configuración =================
+# Cada CUENTA es una "marca" con su contenido, su estilo de edición y sus redes (TikTok y/o YouTube Shorts).
+# Todo lo que está FUERA de "cuentas:" vale para todas; cada cuenta puede sobreescribir cualquier cosa
+# (incluido el bloque "estilo", que se mezcla campo a campo). Guía completa: references/personalizacion.md
+
+cuentas:
+
+  # ---------- EJEMPLO 1: entretenimiento en inglés, estilo "Submagic" (palabra activa amarilla) ----------
+  entretenimiento:
+    activo: true
+    idioma: "en"                       # idioma del AUDIO de las fuentes (descarta vídeos en otro idioma). "auto" = cualquiera
+    zona_horaria: "America/New_York"   # las horas de subida son en la hora de TU PÚBLICO
+    redes:
+      # perfil = carpeta de Chrome (perfiles/<perfil>) con la sesión iniciada. Varias redes pueden compartir perfil.
+      # usuario (TikTok, sin @) y canal (ID de YouTube, empieza por UC...) se comprueban ANTES de publicar.
+      youtube: {activo: true, por_dia: 3, perfil: "A", canal: "UCxxxxxxxxxxxxxxxxxxxxxx", horas: ["09:00", "14:00", "20:00"]}
+      tiktok:  {activo: true, por_dia: 3, perfil: "A", usuario: "mi_usuario_tiktok",      horas: ["09:30", "14:30", "20:30"]}
+    fuentes:
+      canales: ["@MrBeast", "@MarkRober", "@DudePerfect"]   # vídeos recientes más vistos de estos canales
+      busquedas_cc: []                 # búsquedas de YouTube con licencia Creative Commons (ej.: "podcast interview")
+      urls: []                         # vídeos concretos (se procesan una vez)
+      carpeta_local: ""                # o una carpeta con tus propios vídeos (.mp4/.mov/.mkv)
+      ultimos: 8                       # cuántos vídeos recientes mirar por canal
+      duracion_min: 4                  # minutos
+      duracion_max: 180
+      vistas_min_canal: 200000
+      reserva_dias: 2                  # solo busca más si quedan menos clips que por_dia × reserva_dias
+      nuevas_max: 3
+    estilo:
+      editor: |
+        Busca momentos de reto, apuesta, reacción exagerada o giro inesperado. Títulos en mayúscula inicial,
+        con un emoji como mucho. Nada de clickbait falso: el gancho tiene que pasar de verdad en el clip.
+      clip_min_seg: 25
+      clip_max_seg: 60
+      encuadre: "auto"
+      textos: {hashtags_base: ["#fyp", "#foryou"]}
+
+  # ---------- EJEMPLO 2: pódcast en español, estilo limpio (minúsculas, blanco, sin gancho, logo y música) ----------
+  podcast_es:
+    activo: false                      # pon true cuando la configures
+    idioma: "es"
+    zona_horaria: "Europe/Madrid"
+    redes:
+      tiktok:  {activo: true, por_dia: 2, perfil: "B", usuario: "otro_usuario", horas: ["13:00", "21:00"]}
+      youtube: {activo: false}
+    fuentes:
+      carpeta_local: "~/Videos/podcast"   # tus propios episodios
+    estilo:
+      editor: |
+        Es un pódcast de emprendimiento. Elige momentos con un consejo concreto o una opinión polémica, que se
+        entiendan solos. Títulos en español de España, sin emojis, tono serio.
+      clip_min_seg: 30
+      clip_max_seg: 75
+      encuadre: "auto"                 # con 2 personas a cámara las apila arriba/abajo
+      subtitulos: {mayusculas: false, color_activo: "#FFFFFF", salto: 100, palabras_por_linea: 4, tamano: 64}
+      gancho: {activo: false}
+      logo: {fichero: "logos/mi_logo.png", posicion: "arriba-derecha", ancho: 160, opacidad: 0.8}
+      musica: {carpeta: "musica", volumen: 0.08}
+      textos: {hashtags_base: ["#emprendimiento", "#podcast"], credito: false}
+
+# ---------- Estilo POR DEFECTO (lo que no ponga cada cuenta) ----------
+estilo:
+  corte: "momentos"          # momentos (la IA elige lo mejor) | secuencial (trocea todo: Parte 1, 2, 3...)
+  clips_por_video_max: 8
+  encuadre: "auto"           # auto | seguir | blur | crop
+  velocidad: 1.0             # 1.05-1.10 acelera un poco (más retención); 1.0 = normal
+  calidad_crf: 20            # 18 = más calidad/peso, 23 = menos
+  subtitulos:
+    activo: true
+    fuente: "Montserrat ExtraBold"   # nombre de la fuente; mete el .ttf en fuentes_tipo/ si no está instalada
+    tamano: 78
+    color: "#FFFFFF"
+    color_activo: "#FFE500"          # palabra que suena
+    contorno: 6
+    color_contorno: "#000000"
+    sombra: 2
+    mayusculas: true
+    palabras_por_linea: 3
+    salto: 110                       # % de tamaño de la palabra activa (100 = sin salto)
+    altura: null                     # px desde abajo (de 1920). null = automático según el encuadre
+  gancho:                            # texto fijo arriba con fondo (lo escribe la IA, máx 6 palabras)
+    activo: true
+    tamano: 80
+    color_texto: "#FFFFFF"
+    color_fondo: "#000000"
+    segundos: 0                      # 0 = todo el clip; 3 = solo los 3 primeros segundos
+    altura: null                     # px desde arriba. null = automático
+    mayusculas: true
+  logo: {fichero: "", posicion: "arriba-derecha", ancho: 180, opacidad: 0.85, margen: 40}
+  musica: {carpeta: "", volumen: 0.12}
+  textos:
+    idioma: null                     # idioma de títulos/descripciones (null = el de la cuenta)
+    hashtags_base: []
+    max_hashtags: 6
+    credito: true                    # pone la fuente original en la descripción (con CC BY es OBLIGATORIO y se pone siempre)
+    plantilla_credito: "Source: {canal} — {url}"
+
+# ---------- Cerebro: la IA que elige los momentos y escribe títulos ----------
+cerebro:
+  tipo: "api"                # api (cualquier API compatible con OpenAI) | comando (CLI por stdin) | ninguno
+  # Gemini gratis: clave en https://aistudio.google.com/apikey -> .env GEMINI_API_KEY. Cambia el modelo si sale uno mejor.
+  url: "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+  modelo: "gemini-2.5-flash"
+  clave_env: "GEMINI_API_KEY"
+  temperatura: 0.5
+  # Alternativas:
+  #   OpenRouter: url https://openrouter.ai/api/v1/chat/completions, clave_env OPENAI_API_KEY, modelo el que quieras
+  #   Local (LM Studio / Ollama): url http://127.0.0.1:1234/v1/chat/completions (o :11434/v1/...), sin clave
+  #   tipo: comando + comando: ["claude", "-p", "--output-format", "text"]   (Claude Code)
+  #   tipo: comando + comando: ["gemini"]                                    (Gemini CLI, lee el prompt por stdin)
+
+# ---------- Transcripción (Whisper local, gratis) ----------
+whisper_modelo: "large-v3-turbo"   # small (CPU/PC flojo) | medium | large-v3-turbo (GPU NVIDIA) | large-v3
+whisper_dispositivo: "auto"        # auto | cuda | cpu
+
+# ---------- Navegador para subir ----------
+chrome_exe: ""                     # vacío = buscarlo solo
+idioma_navegador: "es-ES"
+
+# ---------- Avisos por Telegram (opcional) ----------
+telegram:
+  token_env: "TELEGRAM_BOT_TOKEN"
+  chat_id: ""
