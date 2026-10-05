@@ -1,9 +1,13 @@
 ---
 name: clips-automaticos
-description: Monta y mantiene un sistema LOCAL que convierte vídeos largos (canales de YouTube, búsquedas Creative Commons o vídeos propios) en clips verticales con subtítulos animados y los sube SOLO a TikTok y YouTube Shorts a sus horas, con varias cuentas y un estilo de edición PERSONALIZADO por cuenta. Usar cuando el usuario quiera "subir vídeos automáticos a redes", "clips automáticos", "un Opus Clip gratis", "automatizar TikTok/Shorts", "varias cuentas de clips", cambiar cómo se editan los vídeos de una cuenta (subtítulos, colores, gancho, logo, música, duración, qué momentos elegir) o arreglar subidas que fallan.
+description: (Antigravity, Codex, Claude Code) Monta y mantiene un sistema LOCAL que convierte vídeos largos (canales de YouTube, búsquedas Creative Commons o vídeos propios) en clips verticales con subtítulos animados y los sube SOLO a TikTok y YouTube Shorts a sus horas, con varias cuentas y un estilo de edición PERSONALIZADO por cuenta. Usar cuando el usuario quiera "subir vídeos automáticos a redes", "clips automáticos", "un Opus Clip gratis", "automatizar TikTok/Shorts", "varias cuentas de clips", cambiar cómo se editan los vídeos de una cuenta (subtítulos, colores, gancho, logo, música, duración, qué momentos elegir) o arreglar subidas que fallan.
 ---
 
 # Clips automáticos (TikTok + YouTube Shorts, multi-cuenta, estilo por cuenta)
+
+Funciona igual en **Antigravity, Codex y Claude Code** (estándar Agent Skills). Los comandos se ejecutan en la
+terminal del proyecto; necesitan red (pip, yt-dlp, subidas) y abrir Chrome, así que en Codex pide permiso o usa un
+modo con acceso a red y fuera del sandbox de solo lectura cuando toque instalar, procesar o subir.
 
 Sistema probado en producción: busca vídeos → los transcribe con Whisper → una IA elige los mejores momentos →
 reencuadra a 9:16 siguiendo caras → quema subtítulos palabra a palabra → sube con Chrome (Playwright) a la hora de
@@ -42,8 +46,13 @@ Por **cada cuenta**:
 6. Qué perfil de Chrome usa cada red. Varias cuentas pueden compartir perfil si son del mismo login; si TikTok/Google
    tienen logins distintos, perfiles distintos (A, B, C...).
 
-Global (una vez): qué IA usar como "cerebro" (Gemini gratis por API es lo más fácil; ver `config.yaml`), y si quiere
-avisos por Telegram.
+Global (una vez): qué IA usar como "cerebro" y si quiere avisos por Telegram. Recomendación según su herramienta:
+- **Codex** (suscripción de ChatGPT): `tipo: comando` con `codex exec ... -` → sin clave de API. Pruébalo antes con
+  `echo 'Devuelve SOLO {"ok": true}' | codex exec --skip-git-repo-check --ephemeral -s read-only -`; si da error de
+  modelo, añade `-m <modelo válido>` al comando.
+- **Antigravity**: Gemini por API con clave gratis de https://aistudio.google.com/apikey (`tipo: api`, ya por defecto).
+- **Claude Code**: `tipo: comando` con `claude -p --output-format text`.
+- Cualquiera: OpenRouter/OpenAI/modelo local por `tipo: api`.
 
 ### 4. Escribir `config.yaml` y `.env`
 - Parte de `config.ejemplo.yaml` (ya copiado como `config.yaml`): borra las cuentas de ejemplo y crea las suyas.

@@ -1,4 +1,4 @@
-# Clips automáticos — skill para Antigravity / Claude Code
+# Clips automáticos — skill para Antigravity, Codex y Claude Code
 
 Convierte vídeos largos en clips verticales con subtítulos animados y los **sube solos a TikTok y YouTube Shorts**,
 con **varias cuentas** y un **estilo de edición distinto para cada una**. Todo en tu PC, gratis.
@@ -17,18 +17,26 @@ cd clips-automaticos-skill
 - **Windows:** `powershell -ExecutionPolicy Bypass -File instalar_skill.ps1`
 - **Mac / Linux:** `bash instalar_skill.sh`
 
-Eso la copia a `~/.gemini/config/skills/` (Antigravity) y, si usas Claude Code, a `~/.claude/skills/`.
-Si prefieres que viva solo en un proyecto: copia `skills/clips-automaticos` a `<tu-proyecto>/.agents/skills/`.
+Eso la copia a la carpeta de skills de cada herramienta:
 
-Luego reinicia Antigravity y dile algo como **"monta los clips automáticos"** (o `/clips-automaticos`).
+| Herramienta | Carpeta | Cómo usarla |
+|---|---|---|
+| **Antigravity** | `~/.gemini/config/skills/` | Reinicia Antigravity y di "monta los clips automáticos" o `/clips-automaticos` |
+| **Codex** (CLI, app o IDE) | `~/.agents/skills/` | Abre Codex y di "monta los clips automáticos" o `$clips-automaticos` |
+| **Claude Code** (si está instalado) | `~/.claude/skills/` | `/clips-automaticos` |
+
+Si prefieres que viva solo en un proyecto: copia `skills/clips-automaticos` a `<tu-proyecto>/.agents/skills/`
+(lo leen Antigravity y Codex).
+
 El agente te entrevista (cuentas, redes, horas, fuentes y **estilo de cada cuenta**), lo instala, te hace iniciar
 sesión una vez, te enseña una previa de cada estilo para que la ajustes y deja las tareas programadas.
 
 ## Qué necesitas
 - Python 3.10+ y Google Chrome. ffmpeg lo instala solo (Windows con winget, Mac con brew).
-- Una IA para elegir momentos y escribir títulos. Lo más fácil: clave **gratis de Gemini**
-  (https://aistudio.google.com/apikey). También vale OpenRouter, OpenAI, un modelo local (LM Studio/Ollama) o un CLI
-  (`claude -p`, `gemini`).
+- Una IA para elegir momentos y escribir títulos:
+  - con **Codex**: usa tu suscripción de ChatGPT con `codex exec`, sin clave de API;
+  - con **Antigravity**: clave **gratis de Gemini** (https://aistudio.google.com/apikey);
+  - también vale OpenRouter, OpenAI, un modelo local (LM Studio/Ollama) o `claude -p`.
 - GPU NVIDIA opcional (Whisper va mucho más rápido).
 - El PC encendido y con sesión iniciada a las horas de subida (Chrome se abre un minuto para subir).
 
